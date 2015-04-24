@@ -1,0 +1,3 @@
+sudo -i -u postgres
+
+createuser -P nodetest
