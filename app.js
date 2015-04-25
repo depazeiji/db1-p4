@@ -17,7 +17,8 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(3002);
 
-  
+var listaEstaciones = [];  
+var listaDistancias = [];
 
 io.sockets.on('connection', function(socket){
   socket.on('login', function(nombre, password){   
@@ -45,16 +46,13 @@ io.sockets.on('connection', function(socket){
             //console.log(result.rows[i].name)
             if(nombre == result.rows[i].nombre && password == result.rows[i].password){
               if(nombre == 'admin'){
-                console.log('mandar a administracion');
                 io.sockets.emit('confirmacion', 2);
               }
               else{
-                console.log(nombre);
                 io.sockets.emit('confirmacion', 1);
               }
             }
             else{
-              console.log('Usuario o contrasena incorrecta');
               io.sockets.emit('confirmacion', 0);
             }
           }
@@ -146,6 +144,130 @@ io.sockets.on('connection', function(socket){
      });
   }); 
 
+   socket.on('agregarEstacion', function(ruta, numero, distancia, lugar){
+    var pg2 = require('pg');
+       var client2 = new pg2.Client({
+        host: 'localhost',
+        port: '5432',
+        user: 'postgres',
+        password: 'a789456123',
+        database: '[BD1]Practica4'
+      });
+          client2.connect(function(err) {
+            if(err) {
+          io.sockets.emit('estacionAgregada', 0, err);
+          return console.error('could not connect to postgres', err);  
+        }
+        client2.query('INSERT INTO RUTA_ESTACION(ruta, estacion, distancia_punto_anterior, numero_estacion) VALUES('
+              + ruta + ',' + numero + ',' + distancia + ',' + lugar + ')', function(err, result) {
+            if(err) {
+              io.sockets.emit('estacionAgregada', 0, "No se pudo agregar la estacion. " + err);
+              return console.error('error running query', err);
+            }
+            io.sockets.emit('estacionAgregada', 1, err)
+             client2.end(); 
+          });
+          
+             
+        
+         
+      
+        });
+  }); 
+
+   socket.on('agregarRuta', function(numero){
+      var pg = require('pg');
+    var client = new pg.Client({
+        host: 'localhost',
+        port: '5432',
+        user: 'postgres',
+        password: 'a789456123',
+        database: '[BD1]Practica4'
+      });
+    client.connect(function(err) {
+        if(err) {
+          io.sockets.emit('rutaAgregada', 0, err);
+          return console.error('could not connect to postgres', err);  
+        }
+        
+        client.query('INSERT INTO RUTA(ruta) VALUES(' + numero + ')', function(err, result) {
+        if(err) {
+          io.sockets.emit('rutaAgregada', 0, "No se pudo agregar la ruta. " + err);
+          return console.error('error running query', err);
+        } 
+        io.sockets.emit('rutaAgregada', 1, err);
+        client.end();
+        });
+      });
+  }); 
+
+      socket.on('asignarBus', function(ruta, bus){
+      var pg = require('pg');
+    var client = new pg.Client({
+        host: 'localhost',
+        port: '5432',
+        user: 'postgres',
+        password: 'a789456123',
+        database: '[BD1]Practica4'
+      });
+    client.connect(function(err) {
+        if(err) {
+          io.sockets.emit('busAsignado', 0, err);
+          return console.error('could not connect to postgres', err);  
+        }
+        
+      client.query('INSERT INTO RUTA_BUS(bus,ruta) VALUES(' + bus + ',' + ruta + ')', function(err, result) {
+        if(err) {
+          io.sockets.emit('busAsignado', 0, "No se pudo asignar el bus. " + err);
+          return console.error('error running query', err);
+        } 
+         io.sockets.emit('busAsignado', 1, err);
+          
+        client.end(); 
+      });
+     });
+  }); 
+
+       socket.on('verHistorial', function(ruta, bus){
+      var pg = require('pg');
+    var client = new pg.Client({
+        host: 'localhost',
+        port: '5432',
+        user: 'postgres',
+        password: 'a789456123',
+        database: '[BD1]Practica4'
+      });
+    client.connect(function(err) {
+        if(err) {
+          io.sockets.emit('historialBuses', 0, err);
+          return console.error('could not connect to postgres', err);  
+        }
+        
+      client.query('SELECT * FROM RUTA_BUS', function(err, result) {
+        if(err) {
+          io.sockets.emit('historialBuses', 0, err);
+          return console.error('error running query', err);
+        } 
+         /*for (var i=0; i<result.rows.length; i++){
+            if(nombre == result.rows[i].nombre && password == result.rows[i].password){
+              if(nombre == 'admin'){
+                io.sockets.emit('confirmacion', 2);
+              }
+              else{
+                io.sockets.emit('confirmacion', 1);
+              }
+            }
+            else{
+              io.sockets.emit('confirmacion', 0);
+            }
+          }*/
+          //console.log(result.rows);
+          io.sockets.emit('historialBuses', 1, result.rows);
+        client.end(); 
+      });
+     });
+  }); 
+    
 });
 
 // view engine setup
