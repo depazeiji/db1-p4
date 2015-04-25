@@ -37,8 +37,8 @@ http://www.tooplate.com/view/2024-vertiwood
                 	<li><a href="#agregarBus" class="selected">Agregar Bus</a></li>
                     <li><a href="#modificarBus">Modificar Bus</a></li>
                     <li><a href="#eliminarBus">Eliminar Bus</a></li>
-                    <li><a href="#gallery">Agregar Ruta</a></li>
-                    <li><a href="#contact" class="last">Contact</a></li>
+                    <li><a href="#agregarRuta">Agregar Ruta</a></li>
+                    <li><a href="#asignarBus" class="last">Asignar Bus</a></li>
                 </ul>
             </div>
 			
@@ -102,48 +102,63 @@ http://www.tooplate.com/view/2024-vertiwood
 
                   </form>
       	      	</div> <!-- end of services -->
+				      
+        	  	<div class="panel" id="agregarRuta">
+        	      	<h2>Agregar Ruta</h2>
+        	    	  <form id="agregarEstacion" method="post" action="index.html" class="blue">
+                    <p>
+                      <label for="estacion">Estacion:</label>
+                      <input id="estacion" type="text" name="estacion" value="">
+                    </p>
+                    <p>
+                      <label for="distancia">Distancia a la estacion anterior:</label>
+                      <input id="distancia" type="text" name="distancia" value="">
+                    </p>
+                    <p>
+                      <label for="lugar">Lugar dentro de la ruta:</label>
+                      <input id="lugar" type="text" name="lugar" value="">
+                    </p>
+                    <p class="submit">
+                      <button type="submit" class="submit_btn float_l">Agregar Estacion</button>
+                    </p>
+                  </form>
+
+                <p><br/></p>
+                <br/>
+                  <form id="agregandoRuta" method="post" action="index.html" class="blue">
+                    <p>
+                      <label for="rutaN">Ruta Numero:</label>
+                      <input id="rutaN" type="text" name="rutaN" value="">
+                    </p>
+                    <p class="submit">
+                      <button type="submit" class="submit_btn float_l">Agregar Ruta</button>
+                    </p>
+                  </form>
+                </div> <!-- end of gallery -->
 				
-        	  	<div class="panel" id="gallery">
-        	      	<h2>Our Gallery</h2>
-        	      	<ul id="gallery_container">
-						<li><a href="#"><img src="images/gallery/image_01.jpg" alt="Image 01" /></a></li>
-						<li class="odd"><a href="#"><img src="images/gallery/image_02.jpg" alt="Image 02" /></a></li>
-						<li><a href="#"><img src="images/gallery/image_03.jpg" alt="Image 03" /></a></li>
-						<li class="odd"><a href="#"><img src="images/gallery/image_04.jpg" alt="Image 04" /></a></li>
-						<li><a href="#"><img src="images/gallery/image_05.jpg" alt="Image 05" /></a></li>
-						<li class="odd"><a href="#"><img src="images/gallery/image_06.jpg" alt="Image 06" /></a></li>
-						<li><a href="#"><img src="images/gallery/image_07.jpg" alt="Image 07" /></a></li>
-						<li class="odd"><a href="#"><img src="images/gallery/image_08.jpg" alt="Image 08" /></a></li>
-      	        	</ul>
-      	      	</div> <!-- end of gallery -->
-				
-        	    <div class="panel" id="contact">
-                    <h2>Contact Information</h2>
-                    <h5>Company Name</h5>
-                    224-448 Suspendisse velit nisi,<br />
-                    Duis consequat tempus, 10880<br />
-                    Cras sit amet ipsum sit
-                    <div class="cleaner h30"></div>
-                    <div id="contact_form">
-                      	<form method="post" name="contact" action="#">
-					  
-							<label for="author2">Name:</label><input type="text" id="author2" name="author" class="required input_field" />
-							<div class="cleaner h10"></div>
-							
-							<label for="email">Email:</label><input type="text" id="email" name="email" class="validate-email required input_field" />
-							<div class="cleaner h10"></div>
-							
-							<label for="text">Message:</label><textarea id="text" name="text" rows="0" cols="0" class="required"></textarea>
-							<div class="cleaner h10"></div>
-							
-							<input type="submit" class="submit_btn float_l" name="submit" id="submit" value="Send" />
-							<input type="reset" class="submit_btn float_r" name="reset" id="reset" value="Reset" />
-						
-                    	</form>
-						
-                  	</div>
+        	    <div class="panel" id="asignarBus">
+                    <h2>Asignar Bus</h2>
+                    <form id="asignandoBus" method="post" action="index.html" class="blue">
+                      <p>
+                        <label for="rutaB">Ruta Numero:</label>
+                        <input id="rutaB" type="text" name="rutaB" value="">
+                      </p>
+                      <p>
+                        <label for="bus">Bus Numero:</label>
+                        <input id="bus" type="text" name="bus" value="">
+                      </p>
+                      <p class="submit">
+                        <button type="submit" class="submit_btn float_l">Asignar Bus</button>
+                      </p>
+                    </form>
+
+                    <form id="historialBus" method="post" action="index.html" class="blue">
+                      <p class="submit">
+                        <button type="submit" class="submit_btn float_l">Ver Historial</button>
+                      </p>
+                    </form>
         	  	</div>
-      	  	</div> <!-- end of scroll -->
+      	  	</div> <!-- end of asignar ruta -->
 		</div>
 		
         <div class="cleaner"></div>
@@ -151,7 +166,7 @@ http://www.tooplate.com/view/2024-vertiwood
     </div> <!-- end of content -->
 	
     <div id="footer">
-        Copyright © 2048 <a href="#">Company Name</a><br />
+        Copyright © 2015 <a href="#">Hecho por Eiji</a><br />
         Design: <b><a href="http://www.tooplate.com"><span class="orange">too</span><span class="green">plate</span></a></b>
 		<!--
         <a href="http://www.tooplate.com/view/2024-vertiwood">Vertiwood</a> 
@@ -232,6 +247,105 @@ http://www.tooplate.com/view/2024-vertiwood
       socket.on('busEliminado', function(valor, error){
          if(valor == 1){
             alert("Bus Eliminado");
+         } else{
+            alert(error);
+         }
+      });
+
+    });
+  </script>
+
+  <script>
+    jQuery(function($){
+      var socket = io.connect('http://192.168.122.1:3002');
+      var $estacionForm = $('#agregarEstacion');
+      var $numero = $('#estacion');
+      var $distancia = $('#distancia');
+      var $lugar = $('#lugar');
+      var $ruta = $('#rutaN');
+      
+      $estacionForm.submit(function(e){
+        e.preventDefault();
+        socket.emit('agregarEstacion', $ruta.val(), $numero.val(), $distancia.val(), $lugar.val());
+        $numero.val('');
+        $distancia.val('');
+        $lugar.val('');
+      });
+
+      socket.on('estacionAgregada', function(valor, error){
+          if(valor == 1){
+              alert("Estacion agregada exitosamente");
+          } else{
+              alert(error);
+           }
+        });
+      });
+
+  </script>
+
+    <script>
+    jQuery(function($){
+      var socket = io.connect('http://192.168.122.1:3002');
+      var $rutaForm = $('#agregandoRuta');
+      var $numero = $('#rutaN');
+      
+      $rutaForm.submit(function(e){
+        e.preventDefault();
+        socket.emit('agregarRuta', $numero.val());
+        //$numero.val('');
+        //alert($nombre.val());
+      });
+
+      socket.on('rutaAgregada', function(valor, error){
+         if(valor == 1){
+            alert("Ruta agregada exitosamente");
+         } else{
+            alert(error);
+         }
+      });
+
+    });
+  </script>
+
+  <script>
+    jQuery(function($){
+      var socket = io.connect('http://192.168.122.1:3002');
+      var $busForm = $('#asignandoBus');
+      var $ruta = $('#rutaB');
+      var $bus = $('#bus');
+      
+      $busForm.submit(function(e){
+        e.preventDefault();
+        socket.emit('asignarBus', $ruta.val(), $bus.val());
+        $ruta.val('');
+        $bus.val('');
+        //alert($nombre.val());
+      });
+
+      socket.on('busAsignado', function(valor, error){
+         if(valor == 1){
+            alert("Bus asignado exitosamente");
+         } else{
+            alert(error);
+         }
+      });
+
+    });
+  </script>
+
+  <script>
+    jQuery(function($){
+      var socket = io.connect('http://192.168.122.1:3002');
+      var $historialForm = $('#historialBus');
+      
+      $historialForm.submit(function(e){
+        e.preventDefault();
+        socket.emit('verHistorial');
+      });
+
+      socket.on('historialBuses', function(valor, filas){
+         if(valor == 1){
+            alert(JSON.stringify(filas, null, 2));
          } else{
             alert(error);
          }

@@ -20,6 +20,8 @@ var io = require('socket.io').listen(3002);
 var listaEstaciones = [];  
 var listaDistancias = [];
 
+var logueado = 1;
+
 io.sockets.on('connection', function(socket){
   socket.on('login', function(nombre, password){   
       var pg = require('pg');
@@ -45,6 +47,7 @@ io.sockets.on('connection', function(socket){
             //console.log(password);
             //console.log(result.rows[i].name)
             if(nombre == result.rows[i].nombre && password == result.rows[i].password){
+              logueado = result.rows[i].cliente;
               if(nombre == 'admin'){
                 io.sockets.emit('confirmacion', 2);
               }
@@ -266,6 +269,38 @@ io.sockets.on('connection', function(socket){
         client.end(); 
       });
      });
+  }); 
+
+socket.on('reservar', function(e1, e2, kilometros, asiento){
+      var pg = require('pg');
+    var client = new pg.Client({
+        host: 'localhost',
+        port: '5432',
+        user: 'postgres',
+        password: 'a789456123',
+        database: '[BD1]Practica4'
+      });
+      client.connect(function(err) {
+        if(err) {
+          io.sockets.emit('reservacionHecha', 0, err);
+          return console.error('could not connect to postgres', err);  
+        }
+         
+        var date = new Date();
+        
+        client.query('INSERT INTO TICKET(hora_salida, hora_llegada, precio, numero_kilometros,' +
+          'numero_asiento, cancelado, cliente, origen, destino)' +
+          'VALUES(\'' + date.getHours() + ':' + date.getMinutes() + ':' + date.getMinutes() + '\',' + 
+            '\'' + (date.getHours()+2) + ':' + date.getMinutes() + ':' + date.getMinutes() + '\',' +
+            (kilometros*2) + ',' + kilometros + ',' + asiento + ',false,' + logueado + ',' + e1 + ',' + e2 + ')', function(err, result) {
+        if(err) {
+          io.sockets.emit('reservacionHecha', 0, "No se pudo agregar la ruta. " + err);
+          return console.error('error running query', err);
+        } 
+        io.sockets.emit('reservacionHecha', 1, err);
+        client.end();
+        });
+      });
   }); 
     
 });
