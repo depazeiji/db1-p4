@@ -98,7 +98,15 @@
       });
 
       socket.on('confirmacion', function(valor){
-        alert(valor);
+        if(valor == 1){
+         window.location.href = "cliente";
+       }
+       else if (valor == 2){
+         window.location.href = "admin";
+       }
+       else{
+        alert("Usuario o contrasena invalida");
+       }
       });
 
     });
