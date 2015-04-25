@@ -56,9 +56,10 @@ io.sockets.on('connection', function(socket){
               }
             }
             else{
-              io.sockets.emit('confirmacion', 0);
+              //io.sockets.emit('confirmacion', 0);
             }
           }
+          io.sockets.emit('confirmacion', 0);
         client.end(); 
       });
     
@@ -294,7 +295,7 @@ socket.on('reservar', function(e1, e2, kilometros, asiento){
             '\'' + (date.getHours()+2) + ':' + date.getMinutes() + ':' + date.getMinutes() + '\',' +
             (kilometros*2) + ',' + kilometros + ',' + asiento + ',false,' + logueado + ',' + e1 + ',' + e2 + ')', function(err, result) {
         if(err) {
-          io.sockets.emit('reservacionHecha', 0, "No se pudo agregar la ruta. " + err);
+          io.sockets.emit('reservacionHecha', 0, "No se pudo reservar boleto. " + err);
           return console.error('error running query', err);
         } 
         io.sockets.emit('reservacionHecha', 1, err);
@@ -303,6 +304,90 @@ socket.on('reservar', function(e1, e2, kilometros, asiento){
       });
   }); 
     
+socket.on('verAPagar', function(){
+      var pg = require('pg');
+    var client = new pg.Client({
+        host: 'localhost',
+        port: '5432',
+        user: 'postgres',
+        password: 'a789456123',
+        database: '[BD1]Practica4'
+      });
+    client.connect(function(err) {
+        if(err) {
+          io.sockets.emit('verPendientes', 0, err);
+          return console.error('could not connect to postgres', err);  
+        }
+        
+      client.query('SELECT ticket, hora_salida, hora_llegada, precio, numero_kilometros, numero_asiento, origen, destino ' +
+        'FROM TICKET WHERE cancelado = false AND cliente = ' + logueado, function(err, result) {
+        if(err) {
+          io.sockets.emit('verPendientes', 0, err);
+          return console.error('error running query', err);
+        } 
+          io.sockets.emit('verPendientes', 1, result.rows);
+        client.end(); 
+      });
+     });
+  }); 
+
+socket.on('pagando', function(boleto){
+      var pg = require('pg');
+    var client = new pg.Client({
+        host: 'localhost',
+        port: '5432',
+        user: 'postgres',
+        password: 'a789456123',
+        database: '[BD1]Practica4'
+      });
+      client.connect(function(err) {
+        if(err) {
+          io.sockets.emit('pagado', 0, err);
+          return console.error('could not connect to postgres', err);  
+        }
+         
+        var date = new Date();
+        
+        client.query('UPDATE TICKET SET cancelado = true WHERE ticket = ' + boleto, function(err, result) {
+        if(err) {
+          io.sockets.emit('pagado', 0, "No se pudo pagar. " + err);
+          return console.error('error running query', err);
+        } 
+        //io.sockets.emit('pagado', 1, err);
+        client.end();
+        });
+      });
+
+ var pg2 = require('pg');
+    var client2 = new pg2.Client({
+        host: 'localhost',
+        port: '5432',
+        user: 'postgres',
+        password: 'a789456123',
+        database: '[BD1]Practica4'
+      });
+      client2.connect(function(err) {
+        if(err) {
+          io.sockets.emit('pagado', 0, err);
+          return console.error('could not connect to postgres', err);  
+        }
+         
+        var date = new Date();
+        
+        client2.query('UPDATE CLIENTE SET saldo = saldo - (SELECT precio FROM TICKET WHERE TICKET = ' +
+          boleto + ') WHERE cliente = ' + logueado, function(err, result) {
+        if(err) {
+          io.sockets.emit('pagado', 0, "No se pudo pagar. " + err);
+          return console.error('error running query', err);
+        } 
+        io.sockets.emit('pagado', 1, err);
+        client2.end();
+        });
+      });
+  }); 
+
+
+
 });
 
 // view engine setup

@@ -72,7 +72,23 @@ http://www.tooplate.com/view/2024-vertiwood
 				
         	    <div class="panel" id="pagar">
                 	<h2>Cancelar</h2>
-                    
+                    <form id="verAPagar" method="post" action="index.html" class="blue">
+                      <p class="submit">
+                        <button type="submit" class="submit_btn float_l">Ver boletos a pagar</button>
+                      </p>
+                    </form>
+
+                    <p><br/></p>
+                <br/>
+                <form id="pagando" method="post" action="index.html" class="blue">
+                      <p>
+                        <label for="boleto">Numero de boleto:</label>
+                        <input id="boleto" type="text" name="boleto" value="">
+                      </p>
+                      <p class="submit">
+                        <button type="submit" class="submit_btn float_l">Pagar</button>
+                      </p>
+                    </form>
                 </div> <!-- end of about us -->
 				
         	    <div class="panel" id="factura">
@@ -103,6 +119,27 @@ http://www.tooplate.com/view/2024-vertiwood
 <script>
     jQuery(function($){
       var socket = io.connect('http://192.168.122.1:3002');
+      var $verAPagarForm = $('#verAPagar');
+      
+      $verAPagarForm.submit(function(e){
+        e.preventDefault();
+        socket.emit('verAPagar');
+      });
+
+      socket.on('verPendientes', function(valor, filas){
+         if(valor == 1){
+            alert(JSON.stringify(filas, null, 2));
+         } else{
+            alert(error);
+         }
+      });
+
+    });
+  </script>
+
+<script>
+    jQuery(function($){
+      var socket = io.connect('http://192.168.122.1:3002');
       var $reservarForm = $('#reservando');
       var $e1 = $('#e1');
       var $e2 = $('#e2');
@@ -122,6 +159,30 @@ http://www.tooplate.com/view/2024-vertiwood
       socket.on('reservacionHecha', function(valor, error){
          if(valor == 1){
             alert("Reservacion hecha");
+         } else{
+            alert(error);
+         }
+      });
+
+    });
+  </script>
+
+  <script>
+    jQuery(function($){
+      var socket = io.connect('http://192.168.122.1:3002');
+      var $pagarForm = $('#pagando');
+      var $boleto = $('#boleto');
+      
+      $pagarForm.submit(function(e){
+        e.preventDefault();
+        socket.emit('pagando', $boleto.val());
+        $boleto.val('');
+        //alert($nombre.val());
+      });
+
+      socket.on('pagado', function(valor, error){
+         if(valor == 1){
+            alert("Pago realizado. Su saldo ha sido debitado");
          } else{
             alert(error);
          }
